@@ -1,5 +1,5 @@
 # QTChat
-
+[![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/Dibad/Proyecto-FIS.svg)](http://isitmaintained.com/project/Dibad/Proyecto-FIS "Average time to resolve an issue")
 [![Percentage of issues still open](http://isitmaintained.com/badge/open/Dibad/Proyecto-FIS.svg)](http://isitmaintained.com/project/Dibad/Proyecto-FIS "Percentage of issues still open")
 
 ## TO DO (Tareas para todo el mundo):
