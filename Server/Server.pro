@@ -12,11 +12,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 INCLUDEPATH += include/
-
+INCLUDEPATH += ../boost-1_67/
 
 HEADERS +=
 
 SOURCES += \
     src/main.cpp
 
-FORMS +=
+
+LIBS += -L../lib \
+        -lboost_system-mgw63-mt-d-x32-1_67 \
+        -lws2_32
