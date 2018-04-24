@@ -1,8 +1,11 @@
-QT       += core gui
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+QT -= gui
+#greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+
+CONFIG += c++11 console
+CONFIG -= app_bundle
+
 
 TARGET = Client
-TEMPLATE = app
 
 
 DEFINES += QT_DEPRECATED_WARNINGS
@@ -11,15 +14,12 @@ DEFINES += QT_DEPRECATED_WARNINGS
 INCLUDEPATH += include/
 
 
-HEADERS += \
-    include/mainwindow.h
+HEADERS +=
 
 SOURCES += \
-    src/main.cpp \
-    src/mainwindow.cpp
+    src/main.cpp
 
-FORMS += \
-    ui/mainwindow.ui
+FORMS +=
 
 #INCLUDEPATH += E:/Boost/boost-mingw/include/boost-1_67
 #LIBS += -LE:/Boost/boost-mingw/lib \
