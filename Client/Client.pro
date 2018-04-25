@@ -1,7 +1,7 @@
 QT -= gui
 #greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-CONFIG += c++11 console
+CONFIG += c++17 console
 CONFIG -= app_bundle
 
 
@@ -12,9 +12,11 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 INCLUDEPATH += include/
+INCLUDEPATH += ../include/
 INCLUDEPATH += ../boost-1_67/
 
-HEADERS +=
+HEADERS += \
+    ../include/message.h
 
 SOURCES += \
     src/main.cpp

@@ -12,9 +12,11 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 INCLUDEPATH += include/
+INCLUDEPATH += ../include/
 INCLUDEPATH += ../boost-1_67/
 
-HEADERS +=
+HEADERS += \
+    ../include/message.h
 
 SOURCES += \
     src/main.cpp
