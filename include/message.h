@@ -4,6 +4,7 @@
 #include <iostream>
 #include <cstring>
 
+
 class Message
 {
 private:
@@ -13,15 +14,28 @@ private:
 
 public:
 
-    Message(const std::string & msg = std::string())
+    Message() = default;
+
+    Message(const std::string & msg)
     {
         std::strcpy(body_, msg.c_str());
     }
 
+    Message(const Message & msg)
+    {
+        std::strcpy(body_, msg.body_);
+    }
 
     Message & operator=(const std::string & msg)
     {
         std::strcpy(body_, msg.c_str());
+
+        return * this;
+    }
+
+    Message & operator=(const Message & msg)
+    {
+        std::strcpy(body_,msg.body_);
 
         return * this;
     }
@@ -32,14 +46,13 @@ public:
         return body_;
     }
 
-
     char * data()
     {
         return body_;
     }
 
 
-    const size_t length() const
+    size_t length() const
     {
         return BODY_LENGTH_;
     }
