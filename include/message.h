@@ -1,68 +1,47 @@
 #pragma once
 
-#include <algorithm>
 #include <iostream>
-#include <cstring>
-
 
 class Message
 {
 private:
-    static const size_t BODY_LENGTH_ = 2048;
-
-    char body_[BODY_LENGTH_];
+    enum Pad { MESSAGE = 0, MAX_LENGTH = 2048 };
+    char data_[Pad::MAX_LENGTH];
 
 public:
 
     Message() = default;
 
-    Message(const std::string & msg)
+    const char * getMessage() const
     {
-        std::strcpy(body_, msg.c_str());
+        return (data_ + Pad::MESSAGE);
     }
 
-    Message(const Message & msg)
+    void setMessage(const char * message)
     {
-        std::strcpy(body_, msg.body_);
-    }
-
-    Message & operator=(const std::string & msg)
-    {
-        std::strcpy(body_, msg.c_str());
-
-        return * this;
-    }
-
-    Message & operator=(const Message & msg)
-    {
-        std::strcpy(body_,msg.body_);
-
-        return * this;
-    }
-
-
-    const char * data() const
-    {
-        return body_;
+        std::strcpy((data_ + Pad::MESSAGE), message);
     }
 
     char * data()
     {
-        return body_;
+        return data_;
     }
 
-
-    size_t length() const
+    const char * data() const
     {
-        return BODY_LENGTH_;
+        return data_;
+    }
+
+    size_t max_length() const
+    {
+        return Pad::MAX_LENGTH;
     }
 
 
+    friend std::ostream & operator<<(std::ostream & os, const Message & msg)
+    {
+        os << msg.getMessage() << std::endl;
 
-   friend std::ostream & operator<<(std::ostream & os, const Message & m)
-   {
-       os << m.body_ << std::endl;
-       return os;
-   }
-
+        return os;
+    }
 };

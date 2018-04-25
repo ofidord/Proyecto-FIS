@@ -37,11 +37,15 @@ int main(int argc, char *argv[])
 
         std::cout << "Connected!" << std::endl;
 
-        boost::system::error_code ignored_error;
+        std::string line;
+        while(std::getline(std::cin, line))
+        {
+            Message msg;
+            msg.setMessage(line.c_str());
 
-        Message msg("Hola");
-        boost::asio::write(socket, boost::asio::buffer(msg.data(), msg.length()), ignored_error);
-
+            boost::system::error_code ignored_error;
+            boost::asio::write(socket, boost::asio::buffer(msg.data(), msg.max_length()), ignored_error);
+        }
     }
     catch(std::exception & e)
     {

@@ -33,12 +33,14 @@ int main(int argc, char *argv[])
 
         std::cout << "Client connected!" << std::endl;
 
-        Message msg;
+        while(true)
+        {
+            Message msg;
+            boost::system::error_code ignored_error;
+            boost::asio::read(socket, boost::asio::buffer(msg.data(), msg.max_length()), ignored_error);
 
-        boost::system::error_code ignored_error;
-        boost::asio::read(socket, boost::asio::buffer(msg.data(), msg.length()), ignored_error);
-
-        std::cout << msg;
+            std::cout << msg;
+        }
     }
     catch(std::exception & e)
     {
