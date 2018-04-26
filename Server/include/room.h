@@ -19,5 +19,5 @@ public:
 
     void leave(participant_ptr participant);
 
-    void deliver(const Message & msg);
+    void deliver(const Message & msg, tcp::endpoint remote_endpoint);
 };

@@ -50,7 +50,7 @@ void Session::handle_read(const boost::system::error_code & error)
 {
     if(!error)
     {
-        room_.deliver(read_msg_);
+        room_.deliver(read_msg_, socket_.remote_endpoint());
         read();
     }
     else

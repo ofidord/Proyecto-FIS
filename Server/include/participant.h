@@ -13,6 +13,7 @@ class Participant
 {
 public:
     virtual ~Participant() = default;
+
     virtual void deliver(const Message & msg) = 0;
 
     virtual tcp::endpoint getDirection() const = 0;
