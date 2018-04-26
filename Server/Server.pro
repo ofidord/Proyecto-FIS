@@ -18,10 +18,16 @@ INCLUDEPATH += ../boost-1_67/
 
 HEADERS += \
     ../include/message.h \
-    include/server.h
+    include/server.h \
+    include/participant.h \
+    include/room.h \
+    include/session.h
 
 SOURCES += \
-    src/main.cpp
+    src/main.cpp \
+    src/room.cpp \
+    src/session.cpp \
+    src/server.cpp
 
 
 LIBS += -L../lib \

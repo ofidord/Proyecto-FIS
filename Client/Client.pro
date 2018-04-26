@@ -22,7 +22,8 @@ HEADERS += \
     include/client.h
 
 SOURCES += \
-    src/main.cpp
+    src/main.cpp \
+    src/client.cpp
 
 LIBS += -L../lib \
         -lboost_system-mgw63-mt-d-x32-1_67 \

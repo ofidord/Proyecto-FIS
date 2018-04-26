@@ -9,6 +9,7 @@
 
 using boost::asio::ip::tcp;
 
+
 int main(int argc, char *argv[])
 {
     try
@@ -39,7 +40,6 @@ int main(int argc, char *argv[])
         boost::thread t(boost::bind(&boost::asio::io_service::run, &io_service));
 
         std::cin.clear();
-
         std::string line;
         while(std::getline(std::cin, line) && line != "?:quit")
         {

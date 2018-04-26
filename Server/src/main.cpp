@@ -4,8 +4,8 @@
 #include <boost/asio.hpp>
 #include <boost/thread.hpp>
 
-#include "server.h"
 #include "message.h"
+#include "server.h"
 
 using boost::asio::ip::tcp;
 
