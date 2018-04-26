@@ -14,93 +14,101 @@ class Client
 {
 private:
 
-    boost::asio::io_service & io_service_;
+    boost::asio::io_context & io_context_;
     tcp::socket socket_;
 
     Message read_msg_;
     std::deque<Message> write_msgs_;
 
 public:
-    Client(boost::asio::io_service & io_service,
+    Client(boost::asio::io_service & io_context,
            const tcp::resolver::results_type & endpoints) :
-        io_service_(io_service),
-        socket_(io_service)
+        io_context_(io_context),
+        socket_(io_context)
     {
-        boost::asio::async_connect(socket_, endpoints, boost::bind(&Client::onConnect, this, _1));
+        connect(endpoints);
     }
 
     void write(const Message & msg)
     {
-        io_service_.post(boost::bind(&Client::writeImpl, this, msg));
+        boost::asio::post(io_context_,
+            [this, msg]()
+        {
+            bool write_in_progress = !write_msgs_.empty();
+            write_msgs_.push_back(msg);
+            if(!write_in_progress)
+                write();
+        });
     }
 
     void close()
     {
-        io_service_.post(boost::bind(&Client::closeImpl, this));
+        boost::asio::post(io_context_, boost::bind(&Client::handle_close, this));
     }
 
 private:
 
-    void onConnect(const boost::system::error_code & error)
+    void connect(const tcp::resolver::results_type & endpoints)
+    {
+        boost::asio::async_connect(socket_,endpoints,
+                                   boost::bind(&Client::handle_connection, this,
+                                               boost::asio::placeholders::error));
+    }
+
+    void handle_connection(const boost::system::error_code & error)
     {
         if(!error)
         {
-            Message msg;
-            msg.setMessage("Connection");
-            boost::asio::async_write(socket_,
-                                     boost::asio::buffer(msg.data(), msg.max_length()),
-                                     boost::bind(&Client::readHandler, this, _1));
+            read();
         }
     }
 
-    void readHandler(const boost::system::error_code & error)
-    {
-        std::cout << read_msg_.data() << std::endl;
 
+    void read()
+    {
+        boost::asio::async_read(socket_,
+                                boost::asio::buffer(read_msg_.data(), read_msg_.max_length()),
+                                boost::bind(&Client::handle_read, this, boost::asio::placeholders::error));
+    }
+
+    void handle_read(const boost::system::error_code & error)
+    {
         if(!error)
         {
-            boost::asio::async_read(socket_,
-                                    boost::asio::buffer(read_msg_.data(), read_msg_.max_length()),
-                                    boost::bind(&Client::readHandler, this, _1));
+            std::cout << read_msg_;
+            read();
         }
         else
         {
-            closeImpl();
+            socket_.close();
         }
     }
 
-    void writeImpl(Message & msg)
+
+    void write()
     {
-        bool write_in_progress = !write_msgs_.empty();
-        write_msgs_.push_back(msg);
-
-        if(!write_in_progress)
-        {
-            boost::asio::async_write(socket_,
-                                     boost::asio::buffer(write_msgs_.front().data(), write_msgs_.front().max_length()),
-                                     boost::bind(&Client::writeHandler, this, _1));
-        }
+        boost::asio::async_write(socket_,
+                                 boost::asio::buffer(write_msgs_.front().data(),
+                                                     write_msgs_.front().max_length()),
+                                 boost::bind(&Client::handle_write, this, boost::asio::placeholders::error));
     }
 
-    void writeHandler(const boost::system::error_code & error)
+    void handle_write(const boost::system::error_code & error)
     {
         if(!error)
         {
             write_msgs_.pop_front();
             if(!write_msgs_.empty())
-            {
-                boost::asio::async_write(socket_,
-                                         boost::asio::buffer(write_msgs_.front().data(), write_msgs_.front().max_length()),
-                                         boost::bind(&Client::writeHandler, this, _1));
-            }
+                write();
         }
         else
         {
-            closeImpl();
+            socket_.close();
         }
     }
 
-    void closeImpl()
+
+    void handle_close()
     {
         socket_.close();
     }

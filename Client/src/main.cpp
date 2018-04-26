@@ -41,12 +41,10 @@ int main(int argc, char *argv[])
         std::cin.clear();
 
         std::string line;
-        while(std::getline(std::cin, line))
+        while(std::getline(std::cin, line) && line != "?:quit")
         {
-            std::cout << "A" << std::endl;
             Message msg;
             msg.setMessage(line.c_str());
-
             c.write(msg);
         }
 
