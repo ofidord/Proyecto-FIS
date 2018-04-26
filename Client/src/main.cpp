@@ -2,8 +2,10 @@
 #include <string>
 
 #include <boost/asio.hpp>
+#include <boost/thread.hpp>
 
 #include "message.h"
+#include "client.h"
 
 using boost::asio::ip::tcp;
 
@@ -27,25 +29,29 @@ int main(int argc, char *argv[])
             port = argv[2];
         }
 
-        boost::asio::io_context io_context;
+        boost::asio::io_service io_service;
 
-        tcp::resolver resolver(io_context);
+        tcp::resolver resolver(io_service);
         tcp::resolver::results_type endpoints = resolver.resolve(ip, port);
 
-        tcp::socket socket(io_context);
-        boost::asio::connect(socket, endpoints);
+        Client c(io_service, endpoints);
 
-        std::cout << "Connected!" << std::endl;
+        boost::thread t(boost::bind(&boost::asio::io_service::run, &io_service));
+
+        std::cin.clear();
 
         std::string line;
         while(std::getline(std::cin, line))
         {
+            std::cout << "A" << std::endl;
             Message msg;
             msg.setMessage(line.c_str());
 
-            boost::system::error_code ignored_error;
-            boost::asio::write(socket, boost::asio::buffer(msg.data(), msg.max_length()), ignored_error);
+            c.write(msg);
         }
+
+        c.close();
+        t.join();
     }
     catch(std::exception & e)
     {
