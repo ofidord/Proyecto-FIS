@@ -30,6 +30,12 @@ void Session::deliver(const Message & msg)
 }
 
 
+tcp::endpoint Session::getDirection() const
+{
+    return socket_.remote_endpoint();
+}
+
+
 void Session::read()
 {
     boost::asio::async_read(socket_,

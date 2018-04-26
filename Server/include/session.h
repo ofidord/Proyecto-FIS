@@ -28,6 +28,8 @@ public:
 
     void deliver(const Message & msg);
 
+    tcp::endpoint getDirection() const;
+
 private:
 
     void read();
