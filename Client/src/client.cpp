@@ -46,6 +46,10 @@ void Client::handle_connection(const boost::system::error_code & error)
 {
     if(!error)
     {
+        std::cout << "Te has conectado al servidor "
+                  << socket_.remote_endpoint().address() << ":"
+                  << socket_.remote_endpoint().port() << std::endl;
+
         read();
     }
 }
@@ -63,6 +67,7 @@ void Client::handle_read(const boost::system::error_code & error)
     if(!error)
     {
         std::cout << read_msg_;
+
         read();
     }
     else

@@ -19,8 +19,6 @@ void Server::accept()
       {
         if (!ec)
         {
-            tcp::endpoint remote_dir = socket.remote_endpoint();
-            std::cout << remote_dir.address() << ":" << remote_dir.port() << " se ha conectado al servidor." << std::endl;
             std::make_shared<Session>(std::move(socket), room_)->start();
         }
 

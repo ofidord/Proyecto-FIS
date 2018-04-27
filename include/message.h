@@ -39,6 +39,12 @@ public:
     }
 
 
+    bool empty() const
+    {
+        return (data_[0] == '\n') || (data_[0] == '\0');
+    }
+
+
     friend std::ostream & operator<<(std::ostream & os, const Message & msg)
     {
         os << msg.getMessage() << std::endl;

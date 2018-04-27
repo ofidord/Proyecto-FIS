@@ -15,6 +15,14 @@ Session::Session(tcp::socket socket, Room & room) :
 void Session::start()
 {
     room_.join(shared_from_this());
+
+    Message connection_message;
+    connection_message.setMessage(std::string(getDirection().address().to_string() + ":" +
+                                      std::to_string(getDirection().port()) + " se ha conectado al servidor.").c_str());
+
+    std::cout << connection_message;
+    room_.deliver(connection_message, getDirection());
+
     read();
 }
 
@@ -55,8 +63,13 @@ void Session::handle_read(const boost::system::error_code & error)
     }
     else
     {
-        tcp::endpoint remote_dir = socket_.remote_endpoint();
-        std::cout << remote_dir.address() << ":" << remote_dir.port() << " se ha desconectado del servidor" << std::endl;
+        Message disconnection_message;
+        disconnection_message.setMessage(std::string(getDirection().address().to_string() + ":" +
+                                                     std::to_string(getDirection().port()) +  " se ha desconectado del servidor.").c_str());
+
+        std::cout << disconnection_message;
+        room_.deliver(disconnection_message, getDirection());
+
         room_.leave(shared_from_this());
     }
 }
