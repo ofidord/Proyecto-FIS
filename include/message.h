@@ -62,8 +62,14 @@ public:
 
     void body(const char * msg)
     {
-        std::strcpy((data_ + Pad::BODY), msg);
+        std::strncpy((data_ + Pad::BODY), msg, Pad::MAX_LENGTH);
     }
+
+    void body(const std::string & msg)
+    {
+        body(msg.c_str());
+    }
+
 
     char * data()
     {
@@ -90,19 +96,6 @@ public:
     }
 
 
-    bool compare(const char * str, size_t len)
-    {
-        if(len > max_length())
-            return false;
-
-        for(size_t i = 0; i < len; ++i)
-            if(body()[i] != str[i])
-                return false;
-
-        return true;
-    }
-
-
     // Operators
 
     bool operator==(const char * str) const
@@ -114,6 +107,12 @@ public:
     bool operator==(const std::string & str) const
     {
         return (*this == str.c_str());
+    }
+
+
+    bool operator==(const Message & msg) const
+    {
+        return (*this == msg.data_);
     }
 
 

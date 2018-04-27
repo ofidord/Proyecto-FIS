@@ -64,7 +64,7 @@ void Session::handle_read(const boost::system::error_code & error)
 {
     if(!error)
     {
-        if(read_msg_.compare("?:", 2))
+        if(std::strncmp(read_msg_.body(), "?:", 2) == 0)
             command();
         else
             room_.deliver(read_msg_, socket_.remote_endpoint());
@@ -113,6 +113,6 @@ void Session::handle_write(const boost::system::error_code & error)
 
 void Session::command()
 {
-    if(read_msg_.compare("?:lista", 7))
+    if(std::strcmp(read_msg_.body(), "?:lista") == 0)
         std::cout << "Comando de lista" << std::endl;
 }

@@ -38,7 +38,7 @@ void Client::close()
 void Client::command(const Message & msg)
 {
     if(msg == "?:lista")
-        std::cout << "[Accion del comando]" << std::endl;
+        std::cout << "[Accion del comando lista]" << std::endl;
     else if(msg == "?:help")
     {
         std::cout << "Lista de comandos: " << std::endl;
