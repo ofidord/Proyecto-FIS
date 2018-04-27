@@ -16,7 +16,7 @@ public:
 
     virtual void deliver(const Message & msg) = 0;
 
-    virtual tcp::endpoint getDirection() const = 0;
+    virtual tcp::endpoint clientEndpoint() const = 0;
 };
 
 typedef std::shared_ptr<Participant> participant_ptr;

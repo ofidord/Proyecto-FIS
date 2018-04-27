@@ -18,11 +18,12 @@ void Session::start()
     room_.join(shared_from_this());
 
     Message connection_message;
-    connection_message.setMessage(std::string(getDirection().address().to_string() + ":" +
-                                      std::to_string(getDirection().port()) + " se ha conectado al servidor.").c_str());
+
+    connection_message.setMessage(std::string(parseAddressAndPort(clientEndpoint()) +
+                                              " se ha conectado al servidor.").c_str());
 
     std::cout << connection_message;
-    room_.deliver(connection_message, getDirection());
+    room_.deliver(connection_message, clientEndpoint());
 
     read();
 }
@@ -39,9 +40,15 @@ void Session::deliver(const Message & msg)
 }
 
 
-tcp::endpoint Session::getDirection() const
+tcp::endpoint Session::clientEndpoint() const
 {
     return socket_.remote_endpoint();
+}
+
+
+std::string Session::parseAddressAndPort(tcp::endpoint ep) const
+{
+    return std::string(ep.address().to_string() + ":" + std::to_string(ep.port()));
 }
 
 
@@ -69,11 +76,11 @@ void Session::handle_read(const boost::system::error_code & error)
     else
     {
         Message disconnection_message;
-        disconnection_message.setMessage(std::string(getDirection().address().to_string() + ":" +
-                                                     std::to_string(getDirection().port()) +  " se ha desconectado del servidor.").c_str());
+        disconnection_message.setMessage(std::string(parseAddressAndPort(clientEndpoint()) +
+                                                     " se ha desconectado del servidor.").c_str());
 
         std::cout << disconnection_message;
-        room_.deliver(disconnection_message, getDirection());
+        room_.deliver(disconnection_message, clientEndpoint());
 
         room_.leave(shared_from_this());
     }

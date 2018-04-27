@@ -28,7 +28,8 @@ public:
 
     void deliver(const Message & msg);
 
-    tcp::endpoint getDirection() const;
+    tcp::endpoint clientEndpoint() const;
+    std::string parseAddressAndPort(tcp::endpoint ep) const;
 
 private:
 

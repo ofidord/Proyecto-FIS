@@ -23,7 +23,7 @@ void Room::deliver(const Message & msg, tcp::endpoint remote_endpoint)
             recent_msgs_.pop_front();
 
         for(auto participant : participants_)
-            if(participant->getDirection() != remote_endpoint)
+            if(participant->clientEndpoint() != remote_endpoint)
                 participant->deliver(msg);
     }
 }
