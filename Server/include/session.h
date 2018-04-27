@@ -37,4 +37,6 @@ private:
 
     void write();
     void handle_write(const boost::system::error_code & error);
+
+    void command();
 };

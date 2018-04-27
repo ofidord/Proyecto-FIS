@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstring>
 
 #include <boost/bind.hpp>
 
@@ -58,7 +59,11 @@ void Session::handle_read(const boost::system::error_code & error)
 {
     if(!error)
     {
-        room_.deliver(read_msg_, socket_.remote_endpoint());
+        if(read_msg_.compare("?:", 2))
+            command();
+        else
+            room_.deliver(read_msg_, socket_.remote_endpoint());
+
         read();
     }
     else
@@ -99,4 +104,11 @@ void Session::handle_write(const boost::system::error_code & error)
     {
         room_.leave(shared_from_this());
     }
+}
+
+
+void Session::command()
+{
+    if(read_msg_.compare("?:lista", 7))
+        std::cout << "Comando de lista" << std::endl;
 }

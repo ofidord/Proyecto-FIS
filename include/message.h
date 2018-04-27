@@ -47,13 +47,25 @@ public:
 
     bool operator==(const char * str) const
     {
-        return (std::strcmp((data_ + Pad::MESSAGE), str) == 0);
+        return (std::strcmp(getMessage(), str) == 0);
     }
 
 
     bool operator==(const std::string & str) const
     {
         return (*this == str.c_str());
+    }
+
+    bool compare(const char * str, size_t len)
+    {
+        if(len > max_length())
+            return false;
+
+        for(int i = 0; i < len; ++i)
+            if(getMessage()[i] != str[i])
+                return false;
+
+        return true;
     }
 
 
