@@ -12,8 +12,6 @@
 ### Ideas de posibles Historias de Usuario: (Añadir entradas al Issue Tracker)
 
 El Cliente quiere:
-* Que se pueda elegir el nombre de usuario.
-* Que se pueda ver que usuarios están conectados al servidor.
 * Que se pueda mostrar la fecha/hora en la se ha enviado un mensaje.
 * Que se puedan crear "grupos" de usuarios, y estar en varios grupos a la vez.
 * Que se se pueda guardar el historial de conversaciones.
