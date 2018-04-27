@@ -16,5 +16,4 @@ El Cliente quiere:
 * Que se puedan crear "grupos" de usuarios, y estar en varios grupos a la vez.
 * Que se se pueda guardar el historial de conversaciones.
 * Que cada usuario sea único (Requiera de un registro/contraseña). [Épica]
-* Que se puedan enviar archivos además de mensajes de texto.
 * Que el chat tenga una interfaz gráfica de usuario. [Épica]
