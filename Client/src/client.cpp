@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 
+
 #include <boost/bind.hpp>
 
 #include "message.h"
@@ -40,7 +41,7 @@ void Client::close()
 void Client::command(const Message & msg)
 {
     if(msg == "?:lista")
-        std::cout << "[Accion del comando lista]" << std::endl;
+        write(Message("?:lista"));
     else if(std::strncmp(msg.data(), "?:nombre", 8) == 0)
     {
         std::cout << "Nuevo nombre de usuario?" << std::endl;

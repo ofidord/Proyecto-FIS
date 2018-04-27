@@ -20,4 +20,6 @@ public:
     void leave(participant_ptr participant);
 
     void deliver(const Message & msg, tcp::endpoint remote_endpoint);
+
+    void sendParticipantsList(participant_ptr remote);
 };

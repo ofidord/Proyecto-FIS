@@ -27,3 +27,15 @@ void Room::deliver(const Message & msg, tcp::endpoint remote_endpoint)
                 participant->deliver(msg);
     }
 }
+
+
+void Room::sendParticipantsList(participant_ptr remote)
+{
+    for(auto & participant : participants_)
+    {
+        tcp::endpoint ep = participant->clientEndpoint();
+        Message part_info(participant->getUsername() + ". [" + ep.address().to_string() + ":" + std::to_string(ep.port()) + "]");
+        remote->deliver(part_info);
+    }
+
+}

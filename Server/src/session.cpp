@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstring>
+#include <ctime>
 
 #include <boost/bind.hpp>
 
@@ -70,7 +71,10 @@ void Session::handle_read(const boost::system::error_code & error)
         {
             if(!read_msg_.empty())
             {
-                Message final_msg(getUsername() + " dijo: " + read_msg_.body());
+                std::time_t t = std::time(0);
+                char cstr[128];
+                std::strftime(cstr, sizeof(cstr), "[%a %x %X] > ", std::localtime(&t));
+                Message final_msg(std::string(cstr) + getUsername() + " dijo: " + read_msg_.body());
                 room_.deliver(final_msg, socket_.remote_endpoint());
             }
         }
@@ -125,6 +129,7 @@ void Session::command()
     {
         Message info("Lista de participantes de la sala:");
         deliver(info);
+        room_.sendParticipantsList(shared_from_this());
     }
     else if (std::strncmp(read_msg_.body(), "?:nombre", 8) == 0)
     {
