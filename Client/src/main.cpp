@@ -43,8 +43,7 @@ int main(int argc, char *argv[])
         std::string line;
         while(std::getline(std::cin, line) && line != "?:quit")
         {            
-            Message msg;
-            msg.setMessage(line.c_str());
+            Message msg(line);
 
             if(line.compare(0, 2, "?:") == 0)
                 c.command(msg);

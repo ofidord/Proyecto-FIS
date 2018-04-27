@@ -17,10 +17,8 @@ void Session::start()
 {
     room_.join(shared_from_this());
 
-    Message connection_message;
-
-    connection_message.setMessage(std::string(parseAddressAndPort(clientEndpoint()) +
-                                              " se ha conectado al servidor.").c_str());
+    Message connection_message(parseAddressAndPort(clientEndpoint()) +
+                               " se ha conectado al servidor.");
 
     std::cout << connection_message;
     room_.deliver(connection_message, clientEndpoint());
@@ -75,9 +73,8 @@ void Session::handle_read(const boost::system::error_code & error)
     }
     else
     {
-        Message disconnection_message;
-        disconnection_message.setMessage(std::string(parseAddressAndPort(clientEndpoint()) +
-                                                     " se ha desconectado del servidor.").c_str());
+        Message disconnection_message(parseAddressAndPort(clientEndpoint()) +
+                                      " se ha desconectado del servidor.");
 
         std::cout << disconnection_message;
         room_.deliver(disconnection_message, clientEndpoint());
