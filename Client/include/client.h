@@ -25,6 +25,8 @@ public:
 
     void close();
 
+    void command(const Message & msg) const;
+
 private:
 
     void connect(const tcp::resolver::results_type & endpoints);

@@ -45,6 +45,18 @@ public:
     }
 
 
+    bool operator==(const char * str) const
+    {
+        return (std::strcmp((data_ + Pad::MESSAGE), str) == 0);
+    }
+
+
+    bool operator==(const std::string & str) const
+    {
+        return (*this == str.c_str());
+    }
+
+
     friend std::ostream & operator<<(std::ostream & os, const Message & msg)
     {
         os << msg.getMessage() << std::endl;

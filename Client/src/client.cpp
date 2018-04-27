@@ -35,6 +35,20 @@ void Client::close()
 }
 
 
+void Client::command(const Message & msg) const
+{
+    if(msg == "?:lista")
+        std::cout << "lista" << std::endl;
+    else if(msg == "?:help")
+    {
+        std::cout << "Lista de comandos: " << std::endl;
+        std::cout << "?:lista -> Muestra un listado con los usuarios conectados al servidor." << std::endl;
+    }
+    else
+        std::cout << "No se ha encontrado el comando. Escriba ?:help para mas informacion." << std::endl;
+}
+
+
 void Client::connect(const tcp::resolver::results_type & endpoints)
 {
     boost::asio::async_connect(socket_,endpoints,
@@ -104,3 +118,4 @@ void Client::handle_close()
 {
     socket_.close();
 }
+
