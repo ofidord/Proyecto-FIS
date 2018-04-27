@@ -16,18 +16,22 @@ int main(int argc, char *argv[])
     {
         std::string ip;
         std::string port;
+        std::string username;
 
-        if(argc != 3)
+        if(argc != 4)
         {
             std::cout << "Ip: ";
             std::cin >> ip;
             std::cout << "Port: ";
             std::cin >> port;
+            std::cout << "Username: ";
+            std::cin >> username;
         }
         else
         {
             ip = argv[1];
             port = argv[2];
+            username = argv[3];
         }
 
         boost::asio::io_service io_service;
@@ -35,13 +39,13 @@ int main(int argc, char *argv[])
         tcp::resolver resolver(io_service);
         tcp::resolver::results_type endpoints = resolver.resolve(ip, port);
 
-        Client c(io_service, endpoints);
+        Client c(io_service, endpoints, username);
 
         boost::thread t(boost::bind(&boost::asio::io_service::run, &io_service));
 
         std::cin.clear();
         std::string line;
-        while(std::getline(std::cin, line) && line != "?:quit")
+        while(std::getline(std::cin, line) && line != "?:salir")
         {            
             Message msg(line);
 

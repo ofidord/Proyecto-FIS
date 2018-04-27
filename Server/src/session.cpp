@@ -67,7 +67,13 @@ void Session::handle_read(const boost::system::error_code & error)
         if(std::strncmp(read_msg_.body(), "?:", 2) == 0)
             command();
         else
-            room_.deliver(read_msg_, socket_.remote_endpoint());
+        {
+            if(!read_msg_.empty())
+            {
+                Message final_msg(getUsername() + " dijo: " + read_msg_.body());
+                room_.deliver(final_msg, socket_.remote_endpoint());
+            }
+        }
 
         read();
     }
@@ -113,6 +119,17 @@ void Session::handle_write(const boost::system::error_code & error)
 
 void Session::command()
 {
+    std::cout << "Command:" << std::endl;
+
     if(std::strcmp(read_msg_.body(), "?:lista") == 0)
-        std::cout << "Comando de lista" << std::endl;
+    {
+        Message info("Lista de participantes de la sala:");
+        deliver(info);
+    }
+    else if (std::strncmp(read_msg_.body(), "?:nombre", 8) == 0)
+    {
+        setUsername(read_msg_.body() + 8);
+        Message tell_username(parseAddressAndPort(clientEndpoint()) + " tiene un nuevo nombre de usuario: " + getUsername());
+        room_.deliver(tell_username, clientEndpoint());
+    }
 }

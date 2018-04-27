@@ -17,9 +17,12 @@ private:
     Message read_msg_;
     std::deque<Message> write_msgs_;
 
+    std::string username_;
+
 public:
     Client(boost::asio::io_service & io_context,
-           const tcp::resolver::results_type & endpoints);
+           const tcp::resolver::results_type & endpoints,
+           const std::string & username);
 
     void write(const Message & msg);
 

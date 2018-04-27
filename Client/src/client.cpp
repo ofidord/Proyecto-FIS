@@ -8,9 +8,11 @@
 
 
 Client::Client(boost::asio::io_service & io_context,
-       const tcp::resolver::results_type & endpoints) :
+               const tcp::resolver::results_type & endpoints,
+               const std::string & username) :
     io_context_(io_context),
-    socket_(io_context)
+    socket_(io_context),
+    username_(username)
 {
     connect(endpoints);
 }
@@ -39,10 +41,19 @@ void Client::command(const Message & msg)
 {
     if(msg == "?:lista")
         std::cout << "[Accion del comando lista]" << std::endl;
+    else if(std::strncmp(msg.data(), "?:nombre", 8) == 0)
+    {
+        std::cout << "Nuevo nombre de usuario?" << std::endl;
+        std::cin >> username_;
+        Message tell_username("?:nombre" + username_);
+        write(tell_username);
+    }
     else if(msg == "?:help")
     {
         std::cout << "Lista de comandos: " << std::endl;
+        std::cout << "?:nombre -> Cambia el nombre de usuario." << std::endl;
         std::cout << "?:lista -> Muestra un listado con los usuarios conectados al servidor." << std::endl;
+        std::cout << "?:salir -> Cerrar el programa." << std::endl;
     }
     else
         std::cout << "No se ha encontrado el comando. Escriba ?:help para mas informacion." << std::endl;
@@ -63,6 +74,9 @@ void Client::handle_connection(const boost::system::error_code & error)
         std::cout << "Te has conectado al servidor "
                   << socket_.remote_endpoint().address() << ":"
                   << socket_.remote_endpoint().port() << std::endl;
+
+        Message tell_username("?:nombre" + username_);
+        write(tell_username);
 
         read();
     }
