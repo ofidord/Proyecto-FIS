@@ -25,7 +25,7 @@ public:
 
     void close();
 
-    void command(const Message & msg) const;
+    void command(const Message & msg);
 
 private:
 
