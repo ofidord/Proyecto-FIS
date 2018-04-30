@@ -83,8 +83,8 @@ void Session::handle_read(const boost::system::error_code & error)
     }
     else
     {
-        Message disconnection_message(parseAddressAndPort(clientEndpoint()) +
-                                      " se ha desconectado del servidor.");
+        Message disconnection_message(getUsername() + " (" + parseAddressAndPort(clientEndpoint()) +
+                                      ") se ha desconectado del servidor.");
 
         std::cout << disconnection_message;
         room_.deliver(disconnection_message, clientEndpoint());
@@ -123,7 +123,7 @@ void Session::handle_write(const boost::system::error_code & error)
 
 void Session::command()
 {
-    std::cout << "Command:" << std::endl;
+    std::cout << "Command received: " << read_msg_.body() << std::endl;
 
     if(std::strcmp(read_msg_.body(), "?:lista") == 0)
     {
@@ -134,7 +134,7 @@ void Session::command()
     else if (std::strncmp(read_msg_.body(), "?:nombre", 8) == 0)
     {
         setUsername(read_msg_.body() + 8);
-        Message tell_username(parseAddressAndPort(clientEndpoint()) + " tiene un nuevo nombre de usuario: " + getUsername());
+        Message tell_username("(" + parseAddressAndPort(clientEndpoint()) + ") Nuevo nombre de usuario: " + getUsername());
         room_.deliver(tell_username, clientEndpoint());
     }
 }
