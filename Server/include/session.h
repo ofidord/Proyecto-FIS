@@ -25,9 +25,10 @@ public:
     Session(tcp::socket socket, Room & room);
 
     void start();
-
     void deliver(const Message & msg);
 
+    // Utilities
+    std::string getLocalTime() const;
     tcp::endpoint clientEndpoint() const;
     std::string parseAddressAndPort(tcp::endpoint ep) const;
 
@@ -39,5 +40,5 @@ private:
     void write();
     void handle_write(const boost::system::error_code & error);
 
-    void command();
+    void parseCommand();
 };
