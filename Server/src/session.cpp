@@ -65,7 +65,7 @@ void Session::handle_read(const boost::system::error_code & error)
 {
     if(!error)
     {
-        if(std::strncmp(read_msg_.body(), "?:", 2) == 0)
+        if(std::strncmp(read_msg_.data(), "?:", 2) == 0)
             command();
         else
         {
@@ -74,7 +74,7 @@ void Session::handle_read(const boost::system::error_code & error)
                 std::time_t t = std::time(0);
                 char cstr[128];
                 std::strftime(cstr, sizeof(cstr), "[%a %x %X] > ", std::localtime(&t));
-                Message final_msg(std::string(cstr) + getUsername() + " dijo: " + read_msg_.body());
+                Message final_msg(std::string(cstr) + getUsername() + " dijo: " + read_msg_.data());
                 room_.deliver(final_msg, socket_.remote_endpoint());
             }
         }
@@ -123,17 +123,17 @@ void Session::handle_write(const boost::system::error_code & error)
 
 void Session::command()
 {
-    std::cout << "Command received: " << read_msg_.body() << std::endl;
+    std::cout << "Command received: " << read_msg_.data() << std::endl;
 
-    if(std::strcmp(read_msg_.body(), "?:lista") == 0)
+    if(std::strcmp(read_msg_.data(), "?:lista") == 0)
     {
         Message info("Lista de participantes de la sala:");
         deliver(info);
         room_.sendParticipantsList(shared_from_this());
     }
-    else if (std::strncmp(read_msg_.body(), "?:nombre", 8) == 0)
+    else if (std::strncmp(read_msg_.data(), "?:nombre", 8) == 0)
     {
-        setUsername(read_msg_.body() + 8);
+        setUsername(read_msg_.data() + 8);
         Message tell_username("(" + parseAddressAndPort(clientEndpoint()) + ") Nuevo nombre de usuario: " + getUsername());
         room_.deliver(tell_username, clientEndpoint());
     }

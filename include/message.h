@@ -6,48 +6,47 @@
 class Message
 {
 private:
-    enum Pad { BODY = 0, MAX_LENGTH = 2048 };
-    char data_[Pad::MAX_LENGTH];
+    enum Pad { MAX_LENGTH = 2048 };
+    char data_[MAX_LENGTH];
 
 public:
 
     // Constructors
-
     Message() = default;
 
     Message(const char * msg)
     {
-        body(msg);
+        copy(msg);
     }
 
     Message(const std::string & msg)
     {
-        body(msg.c_str());
+        copy(msg.c_str());
     }
 
     Message(const Message & msg)
     {
-        body(msg.data_);
+        copy(msg.data_);
     }
 
 
     Message & operator=(const char * msg)
     {
-        body(msg);
+        copy(msg);
 
         return * this;
     }
 
     Message & operator=(const std::string & msg)
     {
-        body(msg.c_str());
+        copy(msg.c_str());
 
         return * this;
     }
 
     Message & operator=(const Message & msg)
     {
-        body(msg.data_);
+        copy(msg.data_);
 
         return * this;
     }
@@ -55,19 +54,14 @@ public:
 
     // Getters and Setters
 
-    const char * body() const
+    void copy(const char * msg)
     {
-        return (data_ + Pad::BODY);
+        std::strncpy(data_, msg, Pad::MAX_LENGTH);
     }
 
-    void body(const char * msg)
+    void copy(const std::string & msg)
     {
-        std::strncpy((data_ + Pad::BODY), msg, Pad::MAX_LENGTH);
-    }
-
-    void body(const std::string & msg)
-    {
-        body(msg.c_str());
+        copy(msg.c_str());
     }
 
 
@@ -100,7 +94,7 @@ public:
 
     bool operator==(const char * str) const
     {
-        return (std::strcmp(body(), str) == 0);
+        return (std::strcmp(data_, str) == 0);
     }
 
 
@@ -118,7 +112,7 @@ public:
 
     friend std::ostream & operator<<(std::ostream & os, const Message & msg)
     {
-        os << msg.body() << std::endl;
+        os << msg.data() << std::endl;
 
         return os;
     }
